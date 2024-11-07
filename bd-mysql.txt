@@ -24,8 +24,6 @@ VALUES
     ('Óleo de Soja', 'Óleo de soja 900ml', '19', 'Soya', 5.49, '2025-05-10'),
     ('Maionese', 'Maionese 500g', '38', 'Hellmann\'s', 7.49, '2024-11-30'),
     ('Papel Toalha', 'Papel toalha 2 rolos', '99', 'Scott', 12.99, '2025-03-01');
--- Inserindo registros de exemplo na tabela Pedidos
-
 
 SELECT * FROM Produtos;
 
