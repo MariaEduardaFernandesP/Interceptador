@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página GET</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .form-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 350px;
+            margin-bottom: 20px;
+            box-sizing: border-box; 
+        }
+
+        h2 {
+            color: #333;
+            font-size: 20px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4c6baf;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #909cd9;
+        }
+
+        .produto-lista {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            width: 100%; 
+            max-width: 800px; 
+        }
+
+        .produto {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: calc(100% - 20px); 
+            max-width: 300px; 
+            text-align: center;
+            box-sizing: border-box; 
+        }
+
+        .produto h3 {
+            color: #333;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        .produto p {
+            color: #555;
+            margin: 5px 0;
+        }
+
+        
+        @media (max-width: 600px) {
+            .form-container {
+                width: 90%; 
+            }
+
+            .produto {
+                width: 100%; 
+                margin: 0; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <form>
+            <h2>GET - Produtos</h2>
+            <button type="button" onclick="fetchProdutos()">Mostrar Produtos</button>
+        </form>
+    </div>
+    <div class="mostrar">
+        <div class="produto-lista" id="produto-lista"></div>
+    </div>
+
+    <script>
+        // Função para buscar produtos da API
+        // Função para buscar produtos do servidor
+function fetchProdutos() {
+    // Faz uma requisição HTTP GET para a API de produtos no servidor local
+    fetch('http://localhost/LojaAPI/controller/produto.php')
+        .then(response => {
+            // Converte a resposta para JSON
+            return response.json();
+        })
+        .then(data => {
+            // Chama a função mostrarProdutos passando os dados recebidos
+            mostrarProdutos(data); // Exibe os produtos recebidos
+        })
+}
+
+// Função para exibir os produtos na página
+function mostrarProdutos(produtos) {
+    // Obtém o elemento HTML onde os produtos serão exibidos
+    const produtoLista = document.getElementById('produto-lista');
+    
+    // Limpa o conteúdo da lista de produtos para garantir que não haja duplicatas
+    produtoLista.innerHTML = ''; // Limpa a lista antes de adicionar novos produtos
+
+    // Percorre o array de produtos recebido do servidor
+    produtos.forEach(produto => {
+        // Cria um novo elemento <div> para cada produto
+        const produtoDiv = document.createElement('div');
+        
+        // Adiciona a classe 'produto' à div para aplicar estilo CSS (se houver)
+        produtoDiv.className = 'produto';
+        
+        // Insere o conteúdo HTML dentro da div com as informações do produto
+        produtoDiv.innerHTML = `
+            <h3>${produto.nome}</h3> <!-- Exibe o nome do produto -->
+            <p>Descrição: ${produto.descricao}</p> <!-- Exibe a descrição do produto -->
+            <p>Quantidade: ${produto.quantidade}</p> <!-- Exibe a quantidade do produto -->
+            <p>Preço: R$ ${produto.preco}</p> <!-- Exibe o preço do produto -->
+            <p>Marca: ${produto.marca}</p> <!-- Exibe a marca do produto -->
+            <p>Validade: ${produto.validade}</p> <!-- Exibe a data de validade do produto -->
+        `;
+        
+        // Adiciona a div do produto ao elemento pai (produto-lista)
+        produtoLista.appendChild(produtoDiv);
+    });
+}
+
+    </script>
+</body>
+</html>

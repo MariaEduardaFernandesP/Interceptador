@@ -1,0 +1,33 @@
+Create DATABASE loja;
+ 
+USE loja;
+ 
+CREATE TABLE Produtos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    descricao TEXT,
+    quantidade INT NOT NULL,
+    marca VARCHAR(50),
+    preco DECIMAL(10, 2) NOT NULL,
+    validade DATE
+);
+
+INSERT INTO Produtos (nome, descricao, quantidade, marca, preco, validade)
+VALUES
+    ('Cereal Matinal', 'Cereal matinal de milho e aveia', '109', 'Kellogg\'s', 15.99, '2025-08-31'),
+    ('Suco de Laranja', 'Suco de laranja 1 litro', '56', 'Del Valle', 6.49, '2024-06-15'),
+    ('Biscoito Recheado', 'Biscoito recheado com creme de chocolate', '33', 'Bauducco', 4.79, '2024-12-31'),
+    ('Arroz Tipo 1', 'Arroz branco tipo 1, 5kg', '47', 'Tio João', 20.99, '2026-02-28'),
+    ('Leite Integral', 'Leite integral 1 litro', '89', 'Itambé', 3.29, '2024-07-10'),
+    ('Macarrão Espaguete', 'Macarrão espaguete 500g', '118', 'Renata', 2.99, '2025-01-20'),
+    ('Café em Pó', 'Café em pó 250g', '65', 'Pilão', 8.99, '2024-09-15'),
+    ('Óleo de Soja', 'Óleo de soja 900ml', '19', 'Soya', 5.49, '2025-05-10'),
+    ('Maionese', 'Maionese 500g', '38', 'Hellmann\'s', 7.49, '2024-11-30'),
+    ('Papel Toalha', 'Papel toalha 2 rolos', '99', 'Scott', 12.99, '2025-03-01');
+-- Inserindo registros de exemplo na tabela Pedidos
+
+
+SELECT * FROM Produtos;
+
+ 
+DROP DATABASE loja;

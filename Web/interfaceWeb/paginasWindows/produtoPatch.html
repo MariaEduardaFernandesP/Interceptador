@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Produto</title>
+    <style>
+        body {
+            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .form-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 20px;
+            text-align: center;
+        }
+
+        .input-container {
+            margin-bottom: 10px;
+        }
+
+        input[type="text"], input[type="number"], input[type="date"], textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            resize: none;
+            height: 100px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4c6baf;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #909cd9;
+        }
+
+        .message {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 4px;
+            display: none;
+            text-align: center;
+        }
+
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .product-card {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+        }
+
+        .product-title {
+            font-size: 18px;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .product-card p {
+            font-size: 14px;
+            color: #333;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <form id="patchProductForm">
+        <h2>Atualizar Produto</h2>
+        <div class="input-container">
+            <input type="text" id="id" name="id" placeholder="ID do Produto" required>
+        </div>
+
+        <div class="input-container">
+            <input type="text" id="nome" name="nome" placeholder="Nome (opcional)">
+        </div>
+
+        <div class="input-container">
+            <textarea id="descricao" name="descricao" placeholder="Descrição (opcional)"></textarea>
+        </div>
+
+        <div class="input-container">
+            <input type="number" id="quantidade" name="quantidade" placeholder="Quantidade (opcional)">
+        </div>
+
+        <div class="input-container">
+            <input type="text" id="marca" name="marca" placeholder="Marca (opcional)">
+        </div>
+
+        <div class="input-container">
+            <input type="number" id="preco" name="preco" placeholder="Preço (opcional)">
+        </div>
+
+        <div class="input-container">
+            <input type="date" id="validade" name="validade">
+        </div>
+
+        <button type="submit">Atualizar Produto</button>
+    </form>
+    <div id="message" class="message"></div>
+    <div id="productDetails"></div>
+</div>
+
+<script>
+    document.getElementById('patchProductForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const id = document.getElementById('id').value;
+        const nome = document.getElementById('nome').value;
+        const descricao = document.getElementById('descricao').value;
+        const quantidade = document.getElementById('quantidade').value;
+        const marca = document.getElementById('marca').value;
+        const preco = document.getElementById('preco').value;
+        const validade = document.getElementById('validade').value;
+
+        const productData = {
+            tabela: 'Produtos',
+            id,
+            ...(nome && { nome }),
+            ...(descricao && { descricao }),
+            ...(quantidade && { quantidade }),
+            ...(marca && { marca }),
+            ...(preco && { preco }),
+            ...(validade && { validade })
+        };
+
+        fetch('http://localhost/LojaAPI/controller/produto.php', {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(productData)
+        })
+        .then(response => response.text())
+        .then(data => {
+            
+                showUpdatedProduct(productData);
+            })
+        
+
+       
+    });
+
+    
+
+    function showUpdatedProduct(product) {
+        const productDetails = document.getElementById('productDetails');
+        productDetails.innerHTML = `
+            <div class="product-card">
+                <h3 class="product-title">Detalhes do Produto Atualizado</h3>
+                <p><strong>ID:</strong> ${product.id}</p>
+                ${product.nome ? `<p><strong>Nome:</strong> ${product.nome}</p>` : ''}
+                ${product.descricao ? `<p><strong>Descrição:</strong> ${product.descricao}</p>` : ''}
+                ${product.quantidade ? `<p><strong>Quantidade:</strong> ${product.quantidade}</p>` : ''}
+                ${product.marca ? `<p><strong>Marca:</strong> ${product.marca}</p>` : ''}
+                ${product.preco ? `<p><strong>Preço:</strong> R$ ${parseFloat(product.preco).toFixed(2)}</p>` : ''}
+                ${product.validade ? `<p><strong>Validade:</strong> ${new Date(product.validade).toLocaleDateString('pt-BR')}</p>` : ''}
+            </div>
+        `;
+        productDetails.style.display = 'block';
+    }
+</script>
+
+</body>
+</html>

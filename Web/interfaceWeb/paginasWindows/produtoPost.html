@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página POST</title>
+    <style>
+        body {
+            background-color: #f0f0f0; 
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .form-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 90%; 
+            max-width: 400px; 
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 20px;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        input[type="text"], input[type="number"], input[type="date"], textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4c6baf; 
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #909cd9; 
+        }
+
+        .message {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            width: 100%;
+            text-align: center;
+            
+        }
+
+        .success {
+            background-color: #d4edda; 
+            color: #155724; 
+        }
+
+        .error {
+            background-color: #f8d7da; 
+            color: #721c24; 
+        }
+
+        .produto-lista {
+            margin-top: 20px;
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            width: 90%; 
+            max-width: 400px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: none; 
+        }
+
+        .produto-item {
+            border-radius: 5px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            align-items: center;
+        }
+
+        .produto-item h3 {
+            margin: 0;
+            font-size: 16px;
+            color: #222325; 
+        }
+
+        .produto-item p {
+            margin: 5px 0;
+            font-size: 18px;
+            color: #555;
+        }
+
+        @media (max-width: 600px) {
+            .form-container,
+            .produto-lista {
+                width: 95%; 
+            }
+
+            h2 {
+                font-size: 18px; 
+            }
+
+            button {
+                font-size: 14px; 
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>POST - Produtos</h2>
+    <form id="form-produto">
+        <label for="nome">Nome do Produto:</label>
+        <input type="text" id="nome" placeholder="Nome do Produto" required>
+
+        <label for="descricao">Descrição:</label>
+        <textarea id="descricao" placeholder="Descrição do Produto" required></textarea>
+
+        <label for="quantidade">Quantidade:</label>
+        <input type="number" id="quantidade" placeholder="Quantidade" required>
+
+        <label for="marca">Marca:</label>
+        <input type="text" id="marca" placeholder="Marca" required>
+
+        <label for="preco">Preço (R$):</label>
+        <input type="number" id="preco" placeholder="Preço (R$)" required step="0.01">
+
+        <label for="validade">Validade:</label>
+        <input type="date" id="validade" required>
+
+        <button type="submit">Criar Produto</button>
+    </form>
+
+    <div class="message" id="message"></div>
+</div>
+
+<!-- Lista de produtos adicionados -->
+<div class="produto-lista" id="produtoLista">
+    <h2>Produto Adicionado:</h2>
+    <div id="itemProdutos"></div>
+</div>
+
+<script>
+    document.getElementById('form-produto').addEventListener('submit', function(event) {
+        event.preventDefault(); 
+
+        const nome = document.getElementById('nome').value;
+        const descricao = document.getElementById('descricao').value;
+        const quantidade = document.getElementById('quantidade').value;
+        const marca = document.getElementById('marca').value;
+        const preco = document.getElementById('preco').value;
+        const validade = document.getElementById('validade').value;
+
+        const produtoData = {
+            nome: nome,
+            descricao: descricao,
+            quantidade: quantidade,
+            marca: marca,
+            preco: preco,
+            validade: validade
+        };
+
+        // Requisição POST para a API
+        fetch('http://localhost/LojaAPI/controller/produto.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(produtoData)
+        })
+        .then(data => {
+            adicionarProdutoNaLista(produtoData); // Adiciona o produto à lista
+        })
+
+    });
+
+    // Função para adicionar produto à lista
+    function adicionarProdutoNaLista(product) {
+        const produtoLista = document.getElementById('produtoLista');
+        const itemProdutos = document.getElementById('itemProdutos');
+
+        // Exibir a lista de produtos se ainda não estiver visível
+        if (!produtoLista.style.display || produtoLista.style.display === 'none') {
+            produtoLista.style.display = 'block';
+        }
+
+        // Criar um novo elemento para o produto
+        const itemProduto = document.createElement('div');
+        itemProduto.className = 'produto-item';
+        itemProduto.innerHTML = `
+            <p><strong>Nome:</strong> ${product.nome}</p>
+            <p><strong>Descrição:</strong> ${product.descricao}</p>
+            <p><strong>Quantidade:</strong> ${product.quantidade}</p>
+            <p><strong>Marca:</strong> ${product.marca}</p>
+            <p><strong>Preço:</strong> R$ ${parseFloat(product.preco).toFixed(2)}</p>
+            <p><strong>Validade:</strong> ${new Date(product.validade).toLocaleDateString('pt-BR')}</p>
+        `;
+
+        // Adicionar o novo produto à lista
+        itemProdutos.appendChild(itemProduto);
+    }
+</script>
+
+</body>
+</html>

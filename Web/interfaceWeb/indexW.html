@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tela WINDOWS</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+
+            text-align: center;
+            padding: 50px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .button-container {
+            margin-top: 20px;
+        }
+
+        .button {
+            background-color: #4c6baf;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            border-radius: 5px;
+        }
+
+        .button:hover {
+            background-color: #909cd9;
+        }
+
+        img {
+            max-width: 100%; /* Para tornar a imagem responsiva */
+            height: 200px; /* Para manter a proporção */
+            margin-bottom: 20px; /* Espaço entre a imagem e os botões */
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Você está usando o Windows</h1>
+
+    <!-- Imagem do logotipo do Windows -->
+    <img src="https://upload.wikimedia.org/wikipedia/pt/e/e0/Windows_logo.png" alt="Logotipo do Windows">
+
+    <div class="button-container">
+        <a href="paginasWindows/produtoGet.html">
+            <button class="button">GET</button>
+        </a>
+        
+        <a href="paginasWindows/produtoPost.html">
+            <button class="button">POST</button>
+        </a>
+        <a href="paginasWindows/produtoPut.html">
+            <button class="button">PUT</button>
+        </a>
+        <a href="paginasWindows/produtoPatch.html">
+            <button class="button">PATCH</button>
+        </a>
+        <a href="paginasWindows/produtoDelete.html">
+            <button class="button">DELETE</button>
+        </a>
+    </div>
+
+</body>
+</html>
